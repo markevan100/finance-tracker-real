@@ -14,8 +14,10 @@ class UsersController < ApplicationController
       flash.now[:danger] = "You have entered an empty search"
     else
       @users = User.search(params[:search_param])
+      @users = current_user.except_current_user(@users)
       flash.now[:danger] = "Sorry, no users found" if @users.blank?
     end
+
     respond_to do |format|
       format.js { render partial: 'friends/result' }
     end
