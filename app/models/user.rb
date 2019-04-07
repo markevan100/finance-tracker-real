@@ -50,5 +50,13 @@ class User < ApplicationRecord
 
  def self.matches(field_name, param)
    User.where("#{field_name} like ?", "%#{param}%")
- end 
+ end
+
+ def except_current_user(users)
+   users.reject { |user| user.id == self.id }
+ end
+
+ def not_friends_with?(friend_id)
+   friendships.where(friend_id: friend_id).count < 1
+ end
 end
